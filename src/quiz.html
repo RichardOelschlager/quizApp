@@ -3,11 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <title>Quiz Application</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="CSS/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
+    <!--At the start of the game, the user should be able to write a nickname she/he wants in the quiz game.-->
+
     <div id="quiz">
+      <div id="nickname-form">
+        <label for="nickname-input">Enter your nickname:</label>
+        <input
+          type="text"
+          id="nickname-input"
+          placeholder="Enter your nickname here..."
+        />
+        <button type="submit" id="start-button">Start</button>
+      </div>
       <div id="question"></div>
       <div id="time-remaining"></div>
       <form id="answer-form">
