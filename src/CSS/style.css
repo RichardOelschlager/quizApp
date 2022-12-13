@@ -1,0 +1,44 @@
+body {
+  font-family: sans-serif;
+}
+
+#quiz {
+  width: 500px;
+  margin: auto;
+}
+
+#question {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+#time-remaining {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+#answer-form {
+  display: flex;
+  align-items: center;
+}
+
+#answer-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+#answer-button {
+  padding: 10px;
+  font-size: 18px;
+}
+
+#high-score-list {
+  margin-top: 20px;
+}
+
+#high-score-item {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
