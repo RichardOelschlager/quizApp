@@ -17,7 +17,6 @@
     "lint": "npm run htmlhint && npm run stylelint && npm run eslint",
     "clean": "rm -rf build/",
     "clean-all": "npm run clean && rm -rf node_modules/ && rm -f package-lock.json"
-
   },
   "keywords": [],
   "author": "",

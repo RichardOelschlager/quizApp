@@ -14,7 +14,7 @@ const quiz = {
     document.querySelector('#start-screen').style.display = 'none'
     document.querySelector('#quiz-screen').style.display = 'block'
     await this.fetchQuestion('https://courselab.lnu.se/quiz/question/1')
-    this.startTimer()
+    // this.startTimer()
   },
 
   // Start the timer for the question
@@ -33,7 +33,7 @@ const quiz = {
         }
       }
       if (this.timeRemaining === 0) {
-        console.log('ending quiz, time up')
+        console.log('Ending quiz, time up')
         this.endQuiz()
       }
     }, 1000)
@@ -51,10 +51,27 @@ const quiz = {
     if (question.type === 'alternatives') {
       console.log('question has alternatives')
       document.querySelector('#answer-input').style.display = 'none'
-      document.querySelector('#answer-alternatives').style.display = 'block'
+      document.querySelector('#answer-alternatives').style.display = 'flex'
       document.querySelector('#answer-alternatives').innerHTML = ''
-      question.alternatives.forEach((alternative, index) => {
-        document.querySelector('#answer-alternatives').innerHTML += `<input type="radio" id="answer-${index}" name="answer" value="${alternative}"><label for="answer-${index}">${alternative}</label><br>`
+      // wrap this in a div
+      Object.entries(question.alternatives).forEach((alternative) => {
+        const div = document.createElement('div')
+        div.id = alternative[0]
+        div.style.display = 'flex'
+        div.style.alignItems = 'center'
+        const input = document.createElement('input')
+        input.type = 'radio'
+        input.id = alternative[0]
+        input.name = 'answer'
+        input.style.flex = '1'
+        const label = document.createElement('label')
+        label.htmlFor = alternative[0]
+        label.textContent = alternative[1]
+        label.style.flex = '2'
+        label.style.marginLeft = '10px'
+        div.appendChild(input)
+        div.appendChild(label)
+        document.querySelector('#answer-alternatives').appendChild(div)
       })
     } else {
       console.log('question has input')
@@ -69,13 +86,14 @@ const quiz = {
 
   // Handle the user's answer
   async handleAnswer () {
+    clearInterval(this.timer)
     if (this.questions[this.questions.length - 1].type === 'alternatives') {
-      const answer = document.querySelector('input[name="answer"]:checked').value
-      console.log('checking answer ', answer)
+      const answer = document.querySelector('input[name="answer"]:checked').id
+      console.log('Checking answer: ', answer)
       await this.checkAnswer(answer)
     } else {
       const answer = document.querySelector('#answer-input').value
-      console.log('checking answer ', answer)
+      console.log('Checking answer: ', answer)
       await this.checkAnswer(answer)
     }
   },
@@ -89,7 +107,7 @@ const quiz = {
       this.score++
       console.log('fetching next question ' + data.nextURL)
       await this.fetchQuestion(data.nextURL)
-      this.startTimer()
+      // this.startTimer()
     } else {
       this.endQuiz()
     }
@@ -111,8 +129,14 @@ const quiz = {
   async fetchQuestion (url) {
     try {
       const data = await REST.get(url)
+      if (data.alternatives) {
+        console.log('question has alternatives')
+        data.type = 'alternatives'
+      } else {
+        console.log('question has input')
+        data.type = 'input'
+      }
       this.questions.push(data)
-      console.log('Fetched questions: ', JSON.stringify([...this.questions]))
       this.updatePage()
       return data
     } catch (error) {
