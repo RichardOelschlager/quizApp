@@ -7,14 +7,41 @@ const quiz = {
   timer: null,
   questions: [],
   answers: [],
+  highScoresList: [],
+  totalTime: 0,
 
   // Start the quiz game
   async startQuiz (nickname) {
     this.nickname = nickname
+    this.loadHighScoreFromWebStorage()
     document.querySelector('#start-screen').style.display = 'none'
     document.querySelector('#quiz-screen').style.display = 'block'
     await this.fetchQuestion('https://courselab.lnu.se/quiz/question/1')
-    // this.startTimer()
+    this.startTimer()
+  },
+
+  async restartQuiz () {
+    this.score = 0
+    this.timeRemaining = 0
+    this.timer = null
+    this.questions = []
+    this.answers = []
+    this.totalTime = 0
+    document.querySelector('#start-screen').style.display = 'block'
+    document.querySelector('#quiz-screen').style.display = 'none'
+    document.querySelector('#end-screen').style.display = 'none'
+    document.querySelector('#answer-form').style.display = 'none'
+    document.querySelector('#answer-input').style.display = 'none'
+    document.querySelector('#answer-input').value = ''
+    document.querySelector('#answer-button').textContent = 'Answer'
+    document.querySelector('#answer-button').disabled = false
+    document.querySelector('#answer-button').style.display = 'block'
+    document.querySelector('#retry-button').style.display = 'none'
+    document.querySelector('#score').textContent = '0'
+    document.querySelector('#time-remaining').textContent = '0'
+    document.querySelector('#total-time').textContent = '0'
+    document.querySelector('#nickname-input').value = ''
+    document.querySelector('#nickname').textContent = ''
   },
 
   // Start the timer for the question
@@ -23,6 +50,7 @@ const quiz = {
     this.updateTimer()
     this.timer = setInterval(() => {
       this.timeRemaining--
+      this.totalTime++
       try {
         this.updateTimer()
       } catch (error) {
@@ -34,7 +62,7 @@ const quiz = {
       }
       if (this.timeRemaining === 0) {
         console.log('Ending quiz, time up')
-        this.endQuiz()
+        this.endQuiz('Time is up!')
       }
     }, 1000)
   },
@@ -47,28 +75,29 @@ const quiz = {
     const question = this.questions[this.questions.length - 1]
     document.querySelector('#question').textContent = question.question
     document.querySelector('#score').textContent = `Score: ${this.score}`
-    document.querySelector('#answer-form').style.display = 'block'
+    document.querySelector('#answer-form').style.display = 'flex'
     if (question.type === 'alternatives') {
       console.log('question has alternatives')
       document.querySelector('#answer-input').style.display = 'none'
       document.querySelector('#answer-alternatives').style.display = 'flex'
       document.querySelector('#answer-alternatives').innerHTML = ''
-      // wrap this in a div
       Object.entries(question.alternatives).forEach((alternative) => {
         const div = document.createElement('div')
         div.id = alternative[0]
         div.style.display = 'flex'
         div.style.alignItems = 'center'
+        div.style.flexDirection = 'column'
         const input = document.createElement('input')
         input.type = 'radio'
         input.id = alternative[0]
         input.name = 'answer'
-        input.style.flex = '1'
+        input.style.margin = '0'
         const label = document.createElement('label')
+        label.style.marginBottom = '10px'
         label.htmlFor = alternative[0]
         label.textContent = alternative[1]
         label.style.flex = '2'
-        label.style.marginLeft = '10px'
+        label.style.textAlign = 'left'
         div.appendChild(input)
         div.appendChild(label)
         document.querySelector('#answer-alternatives').appendChild(div)
@@ -95,6 +124,7 @@ const quiz = {
       const answer = document.querySelector('#answer-input').value
       console.log('Checking answer: ', answer)
       await this.checkAnswer(answer)
+      document.querySelector('#answer-input').value = ''
     }
   },
 
@@ -107,9 +137,9 @@ const quiz = {
       this.score++
       console.log('fetching next question ' + data.nextURL)
       await this.fetchQuestion(data.nextURL)
-      // this.startTimer()
+      this.startTimer()
     } else {
-      this.endQuiz()
+      this.endQuiz('Congratulations! You won!')
     }
   },
 
@@ -117,6 +147,11 @@ const quiz = {
   async postReply (url, body) {
     try {
       const data = await REST.post(url, body)
+      if (data === 400) {
+        console.log('Bad request')
+        this.endQuiz('Wrong answer!')
+        return
+      }
       this.answers.push(await data)
       console.log([...this.answers])
       return data
@@ -145,15 +180,40 @@ const quiz = {
   },
 
   // End the quiz game
-  endQuiz () {
-    clearInterval(this.timer)
-    document.querySelector('#question').textContent = `Game over! Your final score is ${this.score}.`
-    document.querySelector('#answer-form').style.display = 'none'
+  endQuiz (message = 'Game over!') {
+    if (message === 'Congratulations! You won!') {
+      this.highScoresList.push({ nickname: this.nickname, time: this.totalTime })
+      this.highScoresList.sort((a, b) => a.time - b.time)
+      document.querySelector('#high-score-list').innerHTML = ''
+      this.highScoresList.forEach((score) => {
+        const li = document.createElement('li')
+        li.textContent = `${score.nickname} - ${score.time}s`
+        document.querySelector('#high-score-list').appendChild(li)
+      })
+      document.querySelector('#high-score-list').style.display = 'block'
+      document.querySelector('#time-remaining').textContent = 'Leaderboard'
+      document.querySelector('#retry-button').style.display = 'block'
+      clearInterval(this.timer)
+      document.querySelector('#question').textContent = ` ${message} Your time was ${this.totalTime} seconds.`
+      document.querySelector('#answer-form').style.display = 'none'
+      this.saveHighScoreToWebStorage()
+    } else {
+      clearInterval(this.timer)
+      document.querySelector('#question').textContent = ` ${message} Your score was ${this.score}.`
+      document.querySelector('#answer-form').style.display = 'none'
+      document.querySelector('#retry-button').style.display = 'block'
+    }
   },
 
-  sleep (ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }
+  saveHighScoreToWebStorage () {
+    localStorage.setItem('highScores', JSON.stringify(this.highScoresList))
+  },
 
+  loadHighScoreFromWebStorage () {
+    const highScores = JSON.parse(localStorage.getItem('highScores'))
+    if (highScores) {
+      this.highScoresList = highScores
+    }
+  }
 }
 export default quiz

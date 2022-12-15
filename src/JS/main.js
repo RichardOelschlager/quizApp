@@ -14,6 +14,14 @@ startButton.addEventListener('click', async (e) => {
   }
 })
 
+// When the user presses enter
+nicknameInput.addEventListener('keyup', async (e) => {
+  e.preventDefault()
+  if (e.keyCode === 13) {
+    startButton.click()
+  }
+})
+
 // When the user clicks the answer button
 document.querySelector('#answer-button').addEventListener('click', async (e) => {
   e.preventDefault()
@@ -28,4 +36,10 @@ document.querySelector('#answer-button').addEventListener('click', async (e) => 
       await quiz.handleAnswer(answer)
     }
   }
+})
+
+// When the user clicks the retry button
+document.querySelector('#retry-button').addEventListener('click', async (e) => {
+  e.preventDefault()
+  await quiz.restartQuiz()
 })

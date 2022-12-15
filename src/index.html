@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Quiz Application</title>
+    <link rel="stylesheet" type="text/css" href="CSS/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <header>
+      <h1>Quiz Application</h1>
+    </header>
+    <div id="quiz">
+      <div id="start-screen">
+        <div id="nickname-form">
+          <label for="nickname-input">Enter your nickname:</label>
+          <input
+            type="text"
+            id="nickname-input"
+            placeholder="Enter your nickname here..."
+          />
+          <button type="submit" id="start-button">Start</button>
+        </div>
+      </div>
+      <div id="quiz-screen">
+        <div id="question"></div>
+        <div id="time-remaining"></div>
+        <form id="answer-form">
+          <div id="answer-alternatives"> Alternatives </div>
+          <input
+            type="text"
+            id="answer-input"
+            placeholder="Enter your answer here..."
+          />
+          <button type="submit" id="answer-button">Submit</button>
+          <div id="answer-result"></div>
+
+          <div id="score"></div>
+          
+          
+        </form>
+      </div>
+      <div id="end-screen">
+        <div id="final-score"></div>
+        <div id="high-score"></div>
+        <ol id="high-score-list">
+        </ol>
+      </div>
+      <button type="submit" id="retry-button">Retry</button>
+    </div>
+  </body>
+
+  <script type="module" src="JS/main.js"></script>
+</html>

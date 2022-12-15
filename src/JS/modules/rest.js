@@ -34,6 +34,9 @@ export async function post (url, body = null) {
   const response = await fetch(url, options)
   console.log(response.status)
   const data = await response.json()
+  if (response.status === 400) {
+    return response.status
+  }
   console.log(data)
   return data
 }

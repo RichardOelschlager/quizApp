@@ -8,14 +8,17 @@ h1 {
   text-align: center;
   font-size: 48px;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 #quiz {
   background-color: #fff;
   padding: 20px;
-  box-shadow: 10px rgba(0, 0, 0, 0.1);
-  display: block;
-  max-width: 800px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 650px;
   margin: 0 auto;
   text-align: center;
 }
@@ -38,17 +41,20 @@ h1 {
 }
 
 #answer-form {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
 #answer-input {
-  display: block;
-  width: 100%;
   padding: 10px;
   font-size: 18px;
-  margin-right: auto;
   border: 1px solid #ccc;
+  border-radius: 50px;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 10px;
 }
 
 #answer-button {
@@ -61,40 +67,54 @@ h1 {
   color: #fff;
   border: none;
   cursor: pointer;
+  border-radius: 50px;
+  width: 100px;
+}
+
+#retry-button {
+  display: none;
+  padding: 10px;
+  font-size: 18px;
+  margin: auto;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 50px;
+  width: 100px;
 }
 
 #high-score-list {
   margin-top: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 #high-score-item {
   font-size: 18px;
   margin-bottom: 10px;
-}
-
-input[type="text"] {
-  border-radius: 50px;
-}
-
-#start-screen {
   display: flex;
-  margin: 0 auto;
-  justify-content: center;
-  text-align: center;
+  justify-content: space-between;
 }
 
 #nickname-form {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
 #nickname-input {
   margin-top: 20px;
-  display: block;
   padding: 10px;
   font-size: 18px;
-  margin-right: auto;
   border: 1px solid #ccc;
+  border-radius: 50px;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 10px;
 }
 
 #start-button {
@@ -107,6 +127,8 @@ input[type="text"] {
   color: #fff;
   border: none;
   cursor: pointer;
+  border-radius: 50px;
+  width: 100px;
 }
 
 #score {
@@ -118,9 +140,7 @@ input[type="text"] {
 #answer-alternatives {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  margin-top: 20px;
 }
 
 #answer-alternatives label:hover {
@@ -132,4 +152,32 @@ input[type="text"] {
   color: #fff;
 }
 
+input[type="text"],
+input[type="radio"] {
+  border-radius: 50px;
+}
+
+input[type="radio"] {
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fafafa;
+  border: 1px solid #cacece;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05);
+  padding: 9px;
+  border-radius: 50px;
+  display: inline-block;
+  position: relative;
+}
+
+input[type="radio"]:checked {
+  background-color: #e9ecee;
+}
+
+label {
+  /* style the labels */
+  display: inline-block;
+  font-weight: bold;
+  text-align: center;
+}
 

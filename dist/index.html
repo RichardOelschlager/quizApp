@@ -3,8 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <title>Quiz Application</title>
-    <link rel="stylesheet" type="text/css" href="CSS/style.css" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="module" crossorigin src="/assets/index-f03d069e.js"></script>
+    <link rel="stylesheet" href="/assets/index-7be2517c.css">
   </head>
   <body>
     <header>
@@ -36,15 +38,19 @@
           <div id="answer-result"></div>
 
           <div id="score"></div>
-
+          
           
         </form>
       </div>
-      <div id="high-score-list">
-        <div id="high-score-item"></div>
+      <div id="end-screen">
+        <div id="final-score"></div>
+        <div id="high-score"></div>
+        <ol id="high-score-list">
+        </ol>
       </div>
+      <button type="submit" id="retry-button">Retry</button>
     </div>
   </body>
 
-  <script type="module" src="JS/main.js"></script>
+  
 </html>
