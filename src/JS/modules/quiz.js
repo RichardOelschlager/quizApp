@@ -182,6 +182,7 @@ const quiz = {
   // End the quiz game
   endQuiz (message = 'Game over!') {
     if (message === 'Congratulations! You won!') {
+      document.querySelector('#end-screen').style.display = 'block'
       this.highScoresList.push({ nickname: this.nickname, time: this.totalTime })
       this.highScoresList.sort((a, b) => a.time - b.time)
       document.querySelector('#high-score-list').innerHTML = ''

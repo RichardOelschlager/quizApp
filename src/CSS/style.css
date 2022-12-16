@@ -175,7 +175,6 @@ input[type="radio"]:checked {
 }
 
 label {
-  /* style the labels */
   display: inline-block;
   font-weight: bold;
   text-align: center;
